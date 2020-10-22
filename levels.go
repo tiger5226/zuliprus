@@ -1,4 +1,4 @@
-package slackrus
+package zuliprus
 
 import (
 	"github.com/sirupsen/logrus"

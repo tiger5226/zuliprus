@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/johntdyer/slackrus"
 	logrus "github.com/sirupsen/logrus"
+	"github.com/tiger5226/zuliprus"
 )
 
 func main() {
@@ -15,15 +15,18 @@ func main() {
 
 	logrus.SetLevel(logrus.DebugLevel)
 
-	logrus.AddHook(&slackrus.SlackrusHook{
-		HookURL:        "https://hooks.slack.com/services/abc123/defghijklmnopqrstuvwxyz",
-		AcceptedLevels: slackrus.LevelThreshold(logrus.DebugLevel),
-		Channel:        "#slack-testing",
-		IconEmoji:      ":ghost:",
-		Username:       "foobot",
+	logrus.AddHook(&zuliprus.ZuliprusHook{
+		APIURL:         "https://zulip.mycompany.com/api/v1/",
+		APIKey:         "aP8vzq5gwfZHBd4V6ztcYzO4Jugczgt6",
+		Email:          "my-bot@zulip.mycompany.com",
+		AcceptedLevels: zuliprus.LevelThreshold(logrus.DebugLevel),
+		Stream:         "mystream",
+		Topic:          "that-topic",
 	})
 
-	logrus.WithFields(logrus.Fields{"foo": "bar", "foo2": 42}).Warn("this is a warn level message")
-	logrus.Info("this is an info level message")
 	logrus.Debug("this is a debug level message")
+	logrus.Info("this is an info level message")
+	logrus.Error("this is an error level message")
+	logrus.Warning("this is a warning level message")
+
 }

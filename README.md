@@ -1,8 +1,7 @@
-slackrus
+zuliprus
 ========
 
-Slack hook for [Logrus](https://github.com/sirupsen/logrus). 
->>>>>>> Fix import path
+Zulip hook for [Logrus](https://github.com/sirupsen/logrus). 
 
 ## Use
 
@@ -10,9 +9,10 @@ Slack hook for [Logrus](https://github.com/sirupsen/logrus).
 package main
 
 import (
-	logrus "github.com/sirupsen/logrus"
-	"github.com/johntdyer/slackrus"
 	"os"
+
+	logrus "github.com/sirupsen/logrus"
+	"github.com/tiger5226/zuliprus"
 )
 
 func main() {
@@ -22,52 +22,44 @@ func main() {
 	logrus.SetOutput(os.Stderr)
 
 	logrus.SetLevel(logrus.DebugLevel)
-	
-	logrus.AddHook(&slackrus.SlackrusHook{
-		HookURL:        "https://hooks.slack.com/services/abc123/defghijklmnopqrstuvwxyz",
-		AcceptedLevels: slackrus.LevelThreshold(logrus.DebugLevel),
-		Channel:        "#slack-testing",
-		IconEmoji:      ":ghost:",
-		Username:       "foobot",
+
+	logrus.AddHook(&zuliprus.ZuliprusHook{
+		APIURL:         "https://zulip.mycompany.com/api/v1/",
+		APIKey:         "aP8vzq5gwfZHBd4V6ztcYzO4Jugczgt6",
+		Email:          "my-bot@zulip.mycompany.com",
+		AcceptedLevels: zuliprus.LevelThreshold(logrus.DebugLevel),
+		Stream:         "mystream",
+		Topic:          "that-topic",
 	})
 
-	logrus.Warn("warn")
-	logrus.Info("info")
-	logrus.Debug("debug")
+	logrus.Debug("this is a debug level message")
+	logrus.Info("this is an info level message")
+	logrus.Error("this is an error level message")
+	logrus.Warning("this is a warning level message")
+
 }
 
-```
-
-### Extra fields
-You can also add some extra fields to be sent with every slack message
-```go
-extra := map[string]interface{}{
-			"hostname": "nyc-server-1",
-			"tag": "some-tag",
-		}
-	
-logrus.AddHook(&slackrus.SlackrusHook{
-		//HookURL:        "https://hooks.slack.com/services/abc123/defghijklmnopqrstuvwxyz",
-		Extra: 			extra,
-})
 ```
 
 ## Parameters
 
 #### Required
-  * HookURL
-
+  * APIURL
+  * APIKey
+  * Email
+  * Stream
+  
 #### Optional
-  * IconEmoji
-  * IconURL
-  * Username
-  * Channel
+  * AcceptedLevels
+  * UserEmails
+  * Topic
   * Asynchronous
-  * Extra
+  * Disabled
+  * FormatFn
 ## Installation
 
-    go get github.com/johntdyer/slackrus
+    go get github.com/tiger5226/zuliprus
 
 ## Credits
 
-Based on hipchat handler by [nuboLAB](https://github.com/nubo/hiprus)
+Based on slackrus hook by [johntdyer](https://github.com/johntdyer/zuliprus)
