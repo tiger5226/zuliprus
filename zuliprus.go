@@ -36,7 +36,7 @@ type ZuliprusHook struct {
 type FmtFunction func(e *logrus.Entry) string
 
 var MsgFmtFn = func(e *logrus.Entry) string {
-	return fmt.Sprintf("%s>  *%s*  : %s", levelPrefix(e), e.Time.Format("2006-01-02T15:04:05"), e.Message)
+	return fmt.Sprintf("%s>  *%s*  : %s", LevelPrefixFn(e), e.Time.Format("2006-01-02T15:04:05"), e.Message)
 }
 
 // Levels sets which levels to sent to slack
@@ -67,7 +67,9 @@ func (sh *ZuliprusHook) Fire(e *logrus.Entry) error {
 	return sh.sendMessage(msg)
 }
 
-func levelPrefix(e *logrus.Entry) string {
+type LevelPrefix func(e *logrus.Entry) string
+
+var LevelPrefixFn = func(e *logrus.Entry) string {
 	color := ""
 	switch e.Level {
 	case logrus.DebugLevel:

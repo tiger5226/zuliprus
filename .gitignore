@@ -1,1 +1,4 @@
 .idea/
+/go.mod
+/go.sum
+/dev/*
